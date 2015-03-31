@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Entidades.Entities.CargaHoraria>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoDeRegisto.Tipo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hora)
+        </th>
+        <th></th>
+    </tr>
+    @{var i = 0;}
+    @foreach (var item in Model)
+    {
+        if (item.TipoId == 2)
+        {
+            <tr><td colspan="3"></td></tr>
+    <tr class="text-primary">
+        <td>Dia:@item.DataHora.Day</td>
+        <td colspan="2">
+            @String.Format("{0:h:mm}", ViewBag.Tempos[i]) Horas
+            @{i++;}
+        </td>
+    </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataHora)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CargaHorariaId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.CargaHorariaId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CargaHorariaId })
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataHora)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CargaHorariaId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.CargaHorariaId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CargaHorariaId })
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+
