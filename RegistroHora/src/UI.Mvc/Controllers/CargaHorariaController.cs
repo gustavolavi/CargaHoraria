@@ -13,7 +13,7 @@ namespace UserInterfase.Controllers
     {
         ICargaHorariaRepositorio cargahoraria = new CargaHorariaRepositorio();
         ITipoDeRegistroRepositorio tipoDeRegistro = new TipoDeRegistroRepositorio();
-       
+
         public override ActionResult Index()
         {
             if (LoginSession == null)
@@ -39,7 +39,7 @@ namespace UserInterfase.Controllers
                 TimeSpan tempo2 = item2.DataHora.Subtract(item1.DataHora);
 
                 TimeSpan total = tempo1 + tempo2;
-                tempo[i-1] = Convert.ToDateTime(total.ToString());
+                tempo[i - 1] = Convert.ToDateTime(total.ToString());
             }
             ViewBag.Tempos = tempo;
             return View(horarios);
@@ -65,10 +65,15 @@ namespace UserInterfase.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (obj.TipoId == 2 && cargahoraria.GetLastTipoId() != 3)
+                    {
+                        ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida e entrada de almoço.");
+                        ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId); 
+                        return View(obj);
+                    }
                     obj.DaraComHora();
                     cargahoraria.Add(obj);
                 }
-
                 return RedirectToAction("Index");
             }
             catch

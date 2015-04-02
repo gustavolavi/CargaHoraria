@@ -129,6 +129,7 @@ namespace UI.Mvc.Controllers
                         return View(obj);
 
                     }
+
                     else if(usuarioRepositorio.ValidarLogin(obj.Login))
                     {
                         if (obj.Email == LoginSession.Email)

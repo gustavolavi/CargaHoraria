@@ -9,7 +9,7 @@ namespace Entidades.Interfaces.Repositorio
 {
     public interface ICargaHorariaRepositorio : IRepositorioBase<CargaHoraria>
     {
-        CargaHoraria GetLastId();
+        int GetLastTipoId();
         List<CargaHoraria> GetAllByUser(int UsuarioId);
     }
 }

@@ -21,7 +21,7 @@ namespace Infra.Repositorio
             db.SaveChanges();
         }
 
-        public CargaHoraria GetLastId()
+        public int GetLastTipoId()
         {
             var all = GetAll();
             CargaHoraria ch = null;
@@ -39,7 +39,7 @@ namespace Infra.Repositorio
                     ch = item;
                 }
             }
-            return ch;
+            return ch.TipoId;
         }
     }
 }
