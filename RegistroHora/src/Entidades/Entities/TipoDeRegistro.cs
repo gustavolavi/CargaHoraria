@@ -11,8 +11,12 @@ namespace Entidades.Entities
     {
         [Key]
         public int TipoId { get; set; }
+         //entrada e saida
         [Required]
         public string Tipo { get; set; }
+        //empresa ou almoço
+        //[Required]
+        //public string Modo { get; set; }
 
         public virtual ICollection<CargaHoraria> CargaHorarias { get; set; }
     }

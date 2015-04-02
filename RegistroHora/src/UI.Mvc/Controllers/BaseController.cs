@@ -114,7 +114,9 @@ namespace UserInterfase.Controllers
         {
             get
             {
-                return (Usuario)Session["login"];
+                var user =  (Usuario)Session["login"];
+                ViewBag.User = user;
+                return user;
             }
             set
             {

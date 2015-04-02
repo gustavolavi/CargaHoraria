@@ -15,10 +15,12 @@ namespace Infra.Repositorio
         {
             Usuario usuario = new Usuario();
             usuario = db.Usuario.Where(x => x.Login == login).SingleOrDefault();
+
             if (usuario == null)
             {
                 usuario = db.Usuario.Where(x => x.Email == login).SingleOrDefault();
             }
+
             if (usuario != null)
             {
                 if (usuario.Senha == senha)
@@ -26,31 +28,28 @@ namespace Infra.Repositorio
                     return usuario;
                 }
             }
+
             return null;
         }
 
 
 
-        public Collection<string> ListaDeLogins()
+        public bool ValidarLogin(string login)
         {
-            Collection<string> retorno = new Collection<string>();
-            var query = (from u in db.Usuario select u.Login).ToList();
-            foreach (var i in query) {
-                retorno.Add(i);
-            }
-            return retorno;
+            var query = (from c in db.Usuario where c.Login == login select c.Login).FirstOrDefault();
+            if (query != null)
+                return false;
+
+            return true;
+
         }
 
-        public Collection<string> ListaDeEmails()
+        public bool ValidarEmail(string Email)
         {
-            Collection<string> retorno = new Collection<string>();
-            var query = (from u in db.Usuario select u.Email).ToList();
-            foreach (var i in query)
-            {
-                retorno.Add(i);
-            }
-            return retorno;
+            var query = (from c in db.Usuario where c.Email == Email select c.Email).FirstOrDefault();
+            if (query != null)
+                return false;
+            return true;
         }
-
     }
 }

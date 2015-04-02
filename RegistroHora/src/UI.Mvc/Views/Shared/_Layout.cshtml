@@ -25,7 +25,10 @@
                         <li>@Html.ActionLink("Index", "Index", "CargaHoraria")</li>
                         <li>@Html.ActionLink("Create", "Create", "CargaHoraria")</li>
                     </ul>
-                    @Html.ActionLink("Sair", "Deslogar", "Usuario", "", new { @class = "btn btn-info navbar-btn navbar-right" })
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>@Html.ActionLink("Bem Vindo, " + (string)ViewBag.User.Nome, "Edit/" + (int)ViewBag.User.UsuarioId, "Usuario")</li>
+                        <li>@Html.ActionLink("Sair", "Deslogar", "Usuario")</li>
+                    </ul>
                 }
                 else
                 {

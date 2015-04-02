@@ -9,7 +9,7 @@ namespace Infra.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(Infra.Data.Conexao context)

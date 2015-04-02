@@ -28,6 +28,7 @@ namespace Entidades.Entities
         public virtual Usuario Usuario { get; set; }
 
         public virtual TipoDeRegistro TipoDeRegisto { get; set; }
+
         [NotMapped]
         [Required(ErrorMessage = "Data é um campo obrigratorio")]
         [Display(Name = "Data")]

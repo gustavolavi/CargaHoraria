@@ -33,7 +33,7 @@ namespace UI.Mvc.Controllers
                 LoginSession = usuario;
                 return RedirectToAction("Index", "CargaHoraria");
             }
-            ViewBag.Erro = "Login ou Senha invalida";
+            ModelState.AddModelError("", "Login ou senha invalido");
             return View();
         }
 
@@ -52,13 +52,89 @@ namespace UI.Mvc.Controllers
             return View();
         }
 
-        public ActionResult LoginUnico(string login)
+
+        [HttpPost]
+        public override ActionResult Create(Usuario obj)
         {
-            return Json(usuarioRepositorio.ListaDeLogins().All(x => x.ToLower() != login.ToLower()), JsonRequestBehavior.AllowGet);
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+                    if (usuarioRepositorio.ValidarLogin(obj.Login))
+                    {
+                        if (usuarioRepositorio.ValidarEmail(obj.Email))
+                        {
+                            usuarioRepositorio.Add(obj);
+                            return RedirectToAction("Index");
+                        }
+                        ModelState.AddModelError("", "Email já cadastrado");
+                        return View(obj);
+                    }
+                    ModelState.AddModelError("", "Login já cadastrado");
+                }
+
+                return View(obj);
+            }
+            catch
+            {
+                return View(obj);
+            }
         }
-        public ActionResult EmailUnico(string email)
+
+        [HttpPost]
+        public override ActionResult Edit(Usuario obj)
         {
-            return Json(usuarioRepositorio.ListaDeEmails().All(x => x.ToLower() != email.ToLower()), JsonRequestBehavior.AllowGet);
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+                    if (obj.Login == LoginSession.Login) 
+                    {
+                        if (obj.Email == LoginSession.Email)
+                        {
+                            usuarioRepositorio.Update(obj);
+                            LoginSession = obj;
+                            return RedirectToAction("Index");
+                        }
+                        else if (usuarioRepositorio.ValidarEmail(obj.Email))
+                        {
+                            usuarioRepositorio.Update(obj);
+                            LoginSession = obj;
+                            return RedirectToAction("Index");
+                        }
+                        ModelState.AddModelError("", "Email já cadastrado");
+                        return View(obj);
+
+                    }
+                    else if(usuarioRepositorio.ValidarLogin(obj.Login))
+                    {
+                        if (obj.Email == LoginSession.Email)
+                        {
+                            usuarioRepositorio.Update(obj); 
+                            LoginSession = obj;
+                            return RedirectToAction("Index");
+                        }
+                        else if (usuarioRepositorio.ValidarEmail(obj.Email))
+                        {
+                            usuarioRepositorio.Update(obj);
+                            LoginSession = obj;
+                            return RedirectToAction("Index");
+                        }
+                        ModelState.AddModelError("", "Email já cadastrado");
+                        return View(obj);
+                    }
+                    ModelState.AddModelError("", "Login já cadastrado");
+                }
+
+                return View(obj);
+            }
+            catch
+            {
+                return View(obj);
+            }
         }
+
     }
 }
