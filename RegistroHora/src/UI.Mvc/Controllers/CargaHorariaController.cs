@@ -30,16 +30,17 @@ namespace UserInterfase.Controllers
             for (int i = tamanho; i > 0; i--)
             {
 
-                CargaHoraria item1 = horarios[--aux];//e
-                CargaHoraria item2 = horarios[--aux];//a.s
-                CargaHoraria item3 = horarios[--aux];//a.e
-                CargaHoraria item4 = horarios[--aux];//s
+                CargaHoraria item1 = horarios[--aux];//entrada
+                CargaHoraria item2 = horarios[--aux];//almoço.saida
+                CargaHoraria item3 = horarios[--aux];//almoço.entrada
+                CargaHoraria item4 = horarios[--aux];//saida
 
                 TimeSpan tempo1 = item4.DataHora.Subtract(item3.DataHora);
                 TimeSpan tempo2 = item2.DataHora.Subtract(item1.DataHora);
 
                 TimeSpan total = tempo1 + tempo2;
                 tempo[i - 1] = Convert.ToDateTime(total.ToString());
+
             }
             ViewBag.Tempos = tempo;
             return View(horarios);
@@ -65,11 +66,35 @@ namespace UserInterfase.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (obj.TipoId == 2 && cargahoraria.GetLastTipoId() != 3)
+                    switch (obj.TipoId)
                     {
-                        ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida e entrada de almoço.");
-                        ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId); 
-                        return View(obj);
+                        case 1:
+                            break;
+                        case 2:
+                            if (cargahoraria.GetLastTipoId() != 3)
+                            {
+                                ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida e entrada de almoço.");
+                                ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                                return View(obj);
+                            }
+                            break;
+                        case 3:
+                            if (cargahoraria.GetLastTipoId() != 2)
+                            {
+                                ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida de almoço.");
+                                ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                                return View(obj);
+                            }
+                            break;
+                        case 4:
+                            if (cargahoraria.GetLastTipoId() != 1)
+                            {
+                                ModelState.AddModelError("", "Cadastre uma entrada");
+                                ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                                return View(obj);
+                            }
+                            break;
+
                     }
                     obj.DaraComHora();
                     cargahoraria.Add(obj);
