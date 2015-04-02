@@ -81,6 +81,27 @@ namespace UI.Mvc.Controllers
                 return View(obj);
             }
         }
+        public override ActionResult Delete(int id)
+        {
+            if (LoginSession == null)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+            return RedirectToAction("Index", "CargaHoraria");
+        }
+
+        public override ActionResult Edit(int id)
+        {
+            if (id != LoginSession.UsuarioId && LoginSession.Login != "GustavoLaviola")
+            {
+                return RedirectToAction("Index", "CargaHoraria");
+            }
+            if (LoginSession == null)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+            return View(usuarioRepositorio.GetById(id));
+        }
 
         [HttpPost]
         public override ActionResult Edit(Usuario obj)
