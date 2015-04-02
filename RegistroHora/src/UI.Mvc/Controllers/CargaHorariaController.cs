@@ -3,6 +3,7 @@ using Entidades.Interfaces.Repositorio;
 using Infra.Repositorio;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -68,26 +69,26 @@ namespace UserInterfase.Controllers
                 {
                     switch (obj.TipoId)
                     {
-                        case 1:
+                        case 1: //Entrada
                             break;
-                        case 2:
-                            if (cargahoraria.GetLastTipoId() != 3)
+                        case 2: //Saida
+                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 3)
                             {
                                 ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida e entrada de almoço.");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                                 return View(obj);
                             }
                             break;
-                        case 3:
-                            if (cargahoraria.GetLastTipoId() != 2)
+                        case 3: // a.entrada
+                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 4)
                             {
                                 ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida de almoço.");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                                 return View(obj);
                             }
                             break;
-                        case 4:
-                            if (cargahoraria.GetLastTipoId() != 1)
+                        case 4: // a.saida 
+                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 1)
                             {
                                 ModelState.AddModelError("", "Cadastre uma entrada");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
@@ -138,5 +139,20 @@ namespace UserInterfase.Controllers
                 return View(obj);
             }
         }
+
+        public JsonResult JsonCargaHorarias()
+        {
+            var all = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
+            List<Object> resultado = new List<object>();
+      
+            foreach (var i in all) 
+            {
+                resultado.Add(new { Id = i.CargaHorariaId , Tipo = i.TipoDeRegisto.Tipo, Data = Convert.ToString(i.DataHora)});
+            }
+
+          return Json(resultado, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

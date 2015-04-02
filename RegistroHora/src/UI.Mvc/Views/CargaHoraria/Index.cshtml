@@ -3,13 +3,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
-
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table id="relatorio" class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.TipoDeRegisto.Tipo)
@@ -25,13 +22,13 @@
         if (item.TipoId == 2)
         {
             <tr><td colspan="3"></td></tr>
-    <tr class="text-primary">
-        <td>Dia:@item.DataHora.Day</td>
-        <td colspan="2">
-            @String.Format("{0:h:mm}", ViewBag.Tempos[i]) Horas
-            @{i++;}
-        </td>
-    </tr>
+            <tr class="text-primary">
+                <td>Dia:@item.DataHora.Day</td>
+                <td colspan="2">
+                    @String.Format("{0:h:mm}", ViewBag.Tempos[i]) Horas
+                    @{i++;}
+                </td>
+            </tr>
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
@@ -63,6 +60,30 @@
             </tr>
         }
     }
-
 </table>
 
+@*<table id="grid" class="table table-responsive">
+    <tr>
+        <th>Tipo</th>
+        <th>Data</th>
+    </tr>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.getJSON("CargaHoraria/JsonCargaHorarias", function (data) {
+            $.each(data, function (i, item) {
+                $('<tr id=' + item.Id + '>').appendTo($('#grid'));
+                $('<td>', { text: item.Tipo }).appendTo($('#' + item.Id + ''));
+                $('<td>', { text: item.Data }).appendTo($('#' + item.Id + ''));
+            });
+        });
+    });
+</script>*@
+
+@*<script type="text/javascript">
+    $("#download").click(
+        function () {
+            window.print();
+        }
+    );
+</script>*@

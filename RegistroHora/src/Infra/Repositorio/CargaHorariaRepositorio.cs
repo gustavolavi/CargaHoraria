@@ -21,25 +21,9 @@ namespace Infra.Repositorio
             db.SaveChanges();
         }
 
-        public int GetLastTipoId()
+        public int GetLastTipoId(int idDoUsuario)
         {
-            var all = GetAll();
-            CargaHoraria ch = null;
-            foreach (var item in all)
-            {
-                if (ch != null)
-                {
-                    if (ch.DataHora < item.DataHora)
-                    {
-                        ch = item;
-                    }
-                }
-                else
-                {
-                    ch = item;
-                }
-            }
-            return ch.TipoId;
+            return GetAllByUser(idDoUsuario).OrderBy(x => x.DataHora).Last().TipoId;
         }
     }
 }
