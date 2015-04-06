@@ -24,7 +24,25 @@ namespace UserInterfase.Controllers
 
             List<CargaHoraria> horarios = new List<CargaHoraria>();
             horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
+            ViewBag.Tempos = Tempo();
+            return View(horarios);
+        }
 
+        // GET: Base/Create
+        public override ActionResult Create()
+        {
+            if (LoginSession == null)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+            ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo");
+            return View();
+        }
+
+        public DateTime[] Tempo()
+        {
+            List<CargaHoraria> horarios = new List<CargaHoraria>();
+            horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
             int tamanho = (horarios.Count / 4);
             DateTime[] tempo = new DateTime[tamanho];
             int aux = horarios.Count;
@@ -43,21 +61,8 @@ namespace UserInterfase.Controllers
                 tempo[i - 1] = Convert.ToDateTime(total.ToString());
 
             }
-            ViewBag.Tempos = tempo;
-            return View(horarios);
+            return tempo;
         }
-
-        // GET: Base/Create
-        public override ActionResult Create()
-        {
-            if (LoginSession == null)
-            {
-                return RedirectToAction("Index", "Usuario");
-            }
-            ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo");
-            return View();
-        }
-
         // POST: Base/Create
         [HttpPost]
         public override ActionResult Create(CargaHoraria obj)
@@ -144,15 +149,28 @@ namespace UserInterfase.Controllers
         {
             var all = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
             List<Object> resultado = new List<object>();
-      
-            foreach (var i in all) 
+            var temp = Tempo();
+
+            int aux = 0;
+            foreach (var i in all)
             {
-                resultado.Add(new { Id = i.CargaHorariaId , Tipo = i.TipoDeRegisto.Tipo, Data = Convert.ToString(i.DataHora)});
+                if (i.TipoId == 2)
+                {
+                    resultado.Add(new { Id = i.CargaHorariaId, Tipo = i.TipoDeRegisto.Tipo, Data = Convert.ToString(i.DataHora), Dia = "Dia " + i.DataHora.Day, TempoSemana = String.Format("{0:h:mm}", temp[aux]) + " Horas" });
+                    aux++;
+                }
+                else
+                {
+                    resultado.Add(new { Id = i.CargaHorariaId, Tipo = i.TipoDeRegisto.Tipo, Data = Convert.ToString(i.DataHora) });
+                }
             }
 
-          return Json(resultado, JsonRequestBehavior.AllowGet);
+            return Json(new { lista = resultado, nome = all [0].Usuario.Nome}, JsonRequestBehavior.AllowGet);
         }
 
-
+        public ActionResult Download()
+        {
+            return View();
+        }
     }
 }

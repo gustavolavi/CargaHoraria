@@ -4,7 +4,8 @@
     ViewBag.Title = "Index";
 }
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create") /
+    @Html.ActionLink("Download", "Download")
 </p>
 <table id="relatorio" class="table">
     <tr>
@@ -61,29 +62,3 @@
         }
     }
 </table>
-
-@*<table id="grid" class="table table-responsive">
-    <tr>
-        <th>Tipo</th>
-        <th>Data</th>
-    </tr>
-</table>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $.getJSON("CargaHoraria/JsonCargaHorarias", function (data) {
-            $.each(data, function (i, item) {
-                $('<tr id=' + item.Id + '>').appendTo($('#grid'));
-                $('<td>', { text: item.Tipo }).appendTo($('#' + item.Id + ''));
-                $('<td>', { text: item.Data }).appendTo($('#' + item.Id + ''));
-            });
-        });
-    });
-</script>*@
-
-@*<script type="text/javascript">
-    $("#download").click(
-        function () {
-            window.print();
-        }
-    );
-</script>*@
