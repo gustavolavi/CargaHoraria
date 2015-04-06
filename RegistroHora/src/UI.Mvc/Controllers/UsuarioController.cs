@@ -100,7 +100,9 @@ namespace UI.Mvc.Controllers
             {
                 return RedirectToAction("Index", "Usuario");
             }
-            return View(usuarioRepositorio.GetById(id));
+            var user = usuarioRepositorio.GetById(id);
+            user.Senha = null;
+            return View(user);
         }
 
         [HttpPost]

@@ -11,7 +11,7 @@ namespace Infra.Data
     public class Conexao : DbContext
     {
         public Conexao()
-            : base("local") 
+            : base("Conexao") 
         {
         }
 
