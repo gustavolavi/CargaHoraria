@@ -22,7 +22,6 @@ namespace Entidades.Entities
 
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression("^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&*_]).{6,20})", ErrorMessage="A senha deve composta por simbolos,letras maiúsculas, minusculas é numeros")]
         public string Senha { get; set; }
 
         [NotMapped]
@@ -30,7 +29,6 @@ namespace Entidades.Entities
         [DataType(DataType.Password)]
         [Display(Name="Confirmar Senha")]
         [System.ComponentModel.DataAnnotations.Compare("Senha", ErrorMessage = "Senhas não conferem")]
-        [RegularExpression("^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&*_]).{6,20})", ErrorMessage = "A senha deve composta por simbolos,letras maiúsculas, minusculas é numeros")]
         public string ConfirmarSenha { get; set; }
 
         [Required]

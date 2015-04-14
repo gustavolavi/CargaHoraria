@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using UserInterfase.Controllers;
@@ -22,11 +24,10 @@ namespace UI.Mvc.Controllers
             }
             return View();
         }
-
         [HttpPost]
         public ActionResult Index(string login, string senha)
         {
-            var usuario = usuarioRepositorio.Login(login, senha);
+            var usuario = usuarioRepositorio.Login(login, GerarHashMd5(senha));
 
             if (usuario != null)
             {
@@ -36,13 +37,11 @@ namespace UI.Mvc.Controllers
             ModelState.AddModelError("", "Login ou senha invalido");
             return View();
         }
-
         public ActionResult Deslogar()
         {
             LoginSession = null;
             return RedirectToAction("index");
         }
-
         public override ActionResult Create()
         {
             if (LoginSession != null)
@@ -51,8 +50,6 @@ namespace UI.Mvc.Controllers
             }
             return View();
         }
-
-
         [HttpPost]
         public override ActionResult Create(Usuario obj)
         {
@@ -65,6 +62,8 @@ namespace UI.Mvc.Controllers
                     {
                         if (usuarioRepositorio.ValidarEmail(obj.Email))
                         {
+                            obj.Senha = GerarHashMd5(obj.Senha);
+                            obj.ConfirmarSenha = GerarHashMd5(obj.ConfirmarSenha);
                             usuarioRepositorio.Add(obj);
                             return RedirectToAction("Index");
                         }
@@ -76,8 +75,9 @@ namespace UI.Mvc.Controllers
 
                 return View(obj);
             }
-            catch
+            catch (Exception e)
             {
+                ModelState.AddModelError("", e);
                 return View(obj);
             }
         }
@@ -89,7 +89,6 @@ namespace UI.Mvc.Controllers
             }
             return RedirectToAction("Index", "CargaHoraria");
         }
-
         public override ActionResult Edit(int id)
         {
             if (id != LoginSession.UsuarioId && LoginSession.Login != "GustavoLaviola")
@@ -104,27 +103,23 @@ namespace UI.Mvc.Controllers
             user.Senha = null;
             return View(user);
         }
-
         [HttpPost]
         public override ActionResult Edit(Usuario obj)
         {
             try
             {
-
                 if (ModelState.IsValid)
                 {
-                    if (obj.Login == LoginSession.Login) 
+                    if (obj.Login == LoginSession.Login)
                     {
                         if (obj.Email == LoginSession.Email)
                         {
-                            usuarioRepositorio.Update(obj);
-                            LoginSession = obj;
+                            FazerEdição(obj);
                             return RedirectToAction("Index");
                         }
                         else if (usuarioRepositorio.ValidarEmail(obj.Email))
                         {
-                            usuarioRepositorio.Update(obj);
-                            LoginSession = obj;
+                            FazerEdição(obj);
                             return RedirectToAction("Index");
                         }
                         ModelState.AddModelError("", "Email já cadastrado");
@@ -132,18 +127,16 @@ namespace UI.Mvc.Controllers
 
                     }
 
-                    else if(usuarioRepositorio.ValidarLogin(obj.Login))
+                    else if (usuarioRepositorio.ValidarLogin(obj.Login))
                     {
                         if (obj.Email == LoginSession.Email)
                         {
-                            usuarioRepositorio.Update(obj); 
-                            LoginSession = obj;
+                            FazerEdição(obj);
                             return RedirectToAction("Index");
                         }
                         else if (usuarioRepositorio.ValidarEmail(obj.Email))
                         {
-                            usuarioRepositorio.Update(obj);
-                            LoginSession = obj;
+                            FazerEdição(obj);
                             return RedirectToAction("Index");
                         }
                         ModelState.AddModelError("", "Email já cadastrado");
@@ -154,10 +147,35 @@ namespace UI.Mvc.Controllers
 
                 return View(obj);
             }
-            catch
+            catch (Exception e)
             {
+                ModelState.AddModelError("", e);
                 return View(obj);
             }
+        }
+        public void FazerEdição(Usuario obj)
+        {
+            obj.Senha = GerarHashMd5(obj.Senha);
+            obj.ConfirmarSenha = GerarHashMd5(obj.ConfirmarSenha);
+            usuarioRepositorio.Update(obj);
+            LoginSession = obj;
+        }
+        public static string GerarHashMd5(string input)
+        {
+            MD5 md5Hash = MD5.Create();
+            // Converter a String para array de bytes, que é como a biblioteca trabalha.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Cria-se um StringBuilder para recompôr a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop para formatar cada byte como uma String em hexadecimal
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
 
     }

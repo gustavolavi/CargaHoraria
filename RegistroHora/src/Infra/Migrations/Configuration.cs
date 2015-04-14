@@ -1,5 +1,6 @@
 namespace Infra.Migrations
 {
+    using Entidades.Entities;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -9,23 +10,18 @@ namespace Infra.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Infra.Data.Conexao context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.TipoDeRegistro.AddOrUpdate(
+              x => x.Tipo,
+              new TipoDeRegistro { Tipo = "Entrar" },
+              new TipoDeRegistro { Tipo = "Saída" },
+              new TipoDeRegistro { Tipo = "Volta do almoço" },
+              new TipoDeRegistro { Tipo = "Sair para o almoço" }
+            );
         }
     }
 }
