@@ -20,9 +20,13 @@ namespace Infra.Repositorio
             db.SaveChanges();
         }
 
-        public int GetLastTipoId(int idDoUsuario)
+        public CargaHoraria GetLastTipoId(int idDoUsuario)
         {
-            return GetAllByUser(idDoUsuario).OrderBy(x => x.DataHora).Last().TipoId;
+            CargaHoraria retorno = new CargaHoraria();
+            var query = (from CargaHoraria c in db.CargaHoraria where c.UsuarioId == idDoUsuario orderby c.DataHora select c).ToList();
+            if (query.Count > 0)
+                retorno = query.Last();
+            return retorno;
         }
     }
 }

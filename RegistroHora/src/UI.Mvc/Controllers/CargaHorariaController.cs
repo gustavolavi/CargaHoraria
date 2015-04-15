@@ -63,6 +63,7 @@ namespace UserInterfase.Controllers
             }
             return tempo;
         }
+
         // POST: Base/Create
         [HttpPost]
         public override ActionResult Create(CargaHoraria obj)
@@ -72,12 +73,20 @@ namespace UserInterfase.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    obj.DaraComHora();
+                    var ch = cargahoraria.GetLastTipoId(obj.UsuarioId);
+                    if (ch.TipoId != 2 && obj.DataHora.Day != ch.DataHora.Day)
+                    {
+                        ModelState.AddModelError("", "Desculpe mas você não terminou todos os cadastro do dia" + ch.DataHora.Day + "Do mes " + ch.DataHora.Month);
+                        ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                        return View(obj);
+                    }
                     switch (obj.TipoId)
                     {
                         case 1: //Entrada
                             break;
                         case 2: //Saida
-                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 3)
+                            if (ch.TipoId != 3)
                             {
                                 ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida e entrada de almoço.");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
@@ -85,7 +94,7 @@ namespace UserInterfase.Controllers
                             }
                             break;
                         case 3: // a.entrada
-                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 4)
+                            if (ch.TipoId != 4)
                             {
                                 ModelState.AddModelError("", "Desculpe mas o horário de almoço é obrigatorio! Porfavor cadastre uma saida de almoço.");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
@@ -93,7 +102,7 @@ namespace UserInterfase.Controllers
                             }
                             break;
                         case 4: // a.saida 
-                            if (cargahoraria.GetLastTipoId(obj.UsuarioId) != 1)
+                            if (ch.TipoId != 1)
                             {
                                 ModelState.AddModelError("", "Cadastre uma entrada");
                                 ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
@@ -102,14 +111,14 @@ namespace UserInterfase.Controllers
                             break;
 
                     }
-                    obj.DaraComHora();
                     cargahoraria.Add(obj);
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception e)
             {
-                ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                ModelState.AddModelError("", e.Message);
+            ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                 return View(obj);
             }
         }

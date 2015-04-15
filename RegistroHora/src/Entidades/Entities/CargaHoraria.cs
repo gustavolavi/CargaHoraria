@@ -11,7 +11,6 @@ namespace Entidades.Entities
 {
     public class CargaHoraria
     {
-
         [Key]
         public int CargaHorariaId { get; set; }
         
