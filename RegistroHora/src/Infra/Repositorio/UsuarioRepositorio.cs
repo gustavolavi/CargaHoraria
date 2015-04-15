@@ -1,11 +1,11 @@
-﻿using Entidades.Entities;
-using Entidades.Interfaces.Repositorio;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
 using System.Text;
+using Entidades.Entities;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Entidades.Interfaces.Repositorio;
 
 namespace Infra.Repositorio
 {

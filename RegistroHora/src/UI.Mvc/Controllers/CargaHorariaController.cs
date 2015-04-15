@@ -1,12 +1,12 @@
-﻿using Entidades.Entities;
-using Entidades.Interfaces.Repositorio;
+﻿using System;
+using System.Web;
+using System.Linq;
+using System.Web.Mvc;
 using Infra.Repositorio;
-using System;
+using Entidades.Entities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Entidades.Interfaces.Repositorio;
 
 namespace UserInterfase.Controllers
 {
