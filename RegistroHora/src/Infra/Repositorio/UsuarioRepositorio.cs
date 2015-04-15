@@ -20,7 +20,6 @@ namespace Infra.Repositorio
             {
                 usuario = db.Usuario.Where(x => x.Email == login).SingleOrDefault();
             }
-
             if (usuario != null)
             {
                 if (usuario.Senha == senha)
