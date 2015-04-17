@@ -24,7 +24,24 @@ namespace UserInterfase.Controllers
 
             List<CargaHoraria> horarios = new List<CargaHoraria>();
             horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
-            ViewBag.Tempos = Tempo();
+            var tempo = Tempo();
+            ViewBag.Tempos = tempo;
+            int h = 0;
+            int m = 0;
+            foreach (var i in tempo)
+            {
+                h += i.Hour;
+                m += i.Minute;
+                if (m > 59)
+                {
+                    h++;
+                    m = m - 59;
+                }
+            }
+
+
+            ViewBag.TempoTotal = h+":"+m + " de tempo concluido.";
+
             return View(horarios);
         }
 
@@ -43,12 +60,20 @@ namespace UserInterfase.Controllers
         {
             List<CargaHoraria> horarios = new List<CargaHoraria>();
             horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
+            foreach (var i in horarios)
+            {
+                if (i.DataHora.Month < DateTime.Now.Month - 1)
+                {
+                    cargahoraria.Delete(i);
+                }
+            }
+            horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
+
             int tamanho = (horarios.Count / 4);
             DateTime[] tempo = new DateTime[tamanho];
             int aux = horarios.Count;
             for (int i = tamanho; i > 0; i--)
             {
-
                 CargaHoraria item1 = horarios[--aux];//entrada
                 CargaHoraria item2 = horarios[--aux];//almoço.saida
                 CargaHoraria item3 = horarios[--aux];//almoço.entrada
@@ -59,7 +84,6 @@ namespace UserInterfase.Controllers
 
                 TimeSpan total = tempo1 + tempo2;
                 tempo[i - 1] = Convert.ToDateTime(total.ToString());
-
             }
             return tempo;
         }
@@ -77,7 +101,7 @@ namespace UserInterfase.Controllers
                     var ch = cargahoraria.GetLastTipoId(obj.UsuarioId);
                     if (ch.TipoId != 2 && obj.DataHora.Day != ch.DataHora.Day)
                     {
-                        ModelState.AddModelError("", "Desculpe mas você não terminou todos os cadastro do dia" + ch.DataHora.Day + "Do mes " + ch.DataHora.Month);
+                        ModelState.AddModelError("", "Desculpe mas você não terminou todos os cadastro do dia " + ch.DataHora.Day + " do mês " + ch.DataHora.Month);
                         ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                         return View(obj);
                     }
@@ -115,10 +139,10 @@ namespace UserInterfase.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ModelState.AddModelError("", e.Message);
-            ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
+                ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                 return View(obj);
             }
         }
@@ -174,7 +198,7 @@ namespace UserInterfase.Controllers
                 }
             }
 
-            return Json(new { lista = resultado, nome = all [0].Usuario.Nome}, JsonRequestBehavior.AllowGet);
+            return Json(new { lista = resultado, nome = all[0].Usuario.Nome }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Download()
