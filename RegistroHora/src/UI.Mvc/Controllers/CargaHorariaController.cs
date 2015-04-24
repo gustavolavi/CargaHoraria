@@ -26,22 +26,27 @@ namespace UserInterfase.Controllers
             horarios = cargahoraria.GetAllByUser(LoginSession.UsuarioId);
             var tempo = Tempo();
             ViewBag.Tempos = tempo;
+
+            var ultimo = cargahoraria.GetLastTipoId(LoginSession.UsuarioId);
+
             int h = 0;
             int m = 0;
+
             foreach (var i in tempo)
             {
-                h += i.Hour;
-                m += i.Minute;
-                if (m > 59)
+                if (i.Month == ultimo.DataHora.Month)
                 {
-                    h++;
-                    m = m - 59;
+                    h += i.Hour;
+                    m += i.Minute;
+                    if (m > 59)
+                    {
+                        h++;
+                        m = m - 59;
+                    }
                 }
             }
 
-
-            ViewBag.TempoTotal = h+":"+m + " de tempo concluido.";
-
+            ViewBag.TempoTotal = h + ":" + m + " de tempo concluido no ultimo mês cadastrado.";
             return View(horarios);
         }
 
@@ -83,7 +88,14 @@ namespace UserInterfase.Controllers
                 TimeSpan tempo2 = item2.DataHora.Subtract(item1.DataHora);
 
                 TimeSpan total = tempo1 + tempo2;
-                tempo[i - 1] = Convert.ToDateTime(total.ToString());
+                tempo[i - 1] = new DateTime(
+                    item1.DataHora.Year,
+                    item1.DataHora.Month,
+                    item1.DataHora.Day,
+                    Convert.ToDateTime(total.ToString()).Hour,
+                    Convert.ToDateTime(total.ToString()).Minute,
+                    Convert.ToDateTime(total.ToString()).Second
+                );
             }
             return tempo;
         }
@@ -99,12 +111,14 @@ namespace UserInterfase.Controllers
                 {
                     obj.DaraComHora();
                     var ch = cargahoraria.GetLastTipoId(obj.UsuarioId);
+                    
                     if (ch.TipoId != 2 && obj.DataHora.Day != ch.DataHora.Day)
                     {
                         ModelState.AddModelError("", "Desculpe mas você não terminou todos os cadastro do dia " + ch.DataHora.Day + " do mês " + ch.DataHora.Month);
                         ViewBag.TipoId = new SelectList(tipoDeRegistro.GetAll(), "TipoId", "Tipo", obj.TipoId);
                         return View(obj);
                     }
+
                     switch (obj.TipoId)
                     {
                         case 1: //Entrada

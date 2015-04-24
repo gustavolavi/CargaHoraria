@@ -3,66 +3,69 @@
 @{
     ViewBag.Title = "Index";
 }
+<h4 class="alert alert-info">
+    Tempo Total :  @ViewBag.TempoTotal
+</h4>
 <p>
-    @Html.ActionLink("Create New", "Create") /
+    @Html.ActionLink("Cadastrar novo Horario", "Create") /
     @Html.ActionLink("Download", "Download")
 </p>
-<div>
-    <h4 class="alert alert-warning"> Tempo Total :  @ViewBag.TempoTotal</h4>
+<div class="bg-color-5">
+    <table id="relatorio" class="table table-responsive">
+        <tr class="bg-color-1 font-color-4">
+            <th>
+                @Html.DisplayNameFor(model => model.TipoDeRegisto.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hora)
+            </th>
+            <th>
+            </th>
+        </tr>
+        @{var i = 0;}
+        @foreach (var item in Model)
+        {
+            if (item.TipoId == 2)
+            {
+                <tr><td colspan="3"></td></tr>
+                <tr class="bg-color-2 font-color-4">
+                    <td>Dia:@item.DataHora.Day</td>
+                    <td colspan="2">
+                        @String.Format("{0:h:mm}", ViewBag.Tempos[i]) Horas
+                        @{i++;}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHora)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" }) |
+                        @Html.ActionLink("Detalhes", "Details", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" }) |
+                        @Html.ActionLink("Deletar", "Delete", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" })
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHora)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" }) |
+                        @Html.ActionLink("Detalhes", "Details", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" }) |
+                        @Html.ActionLink("Deletar", "Delete", new { id = item.CargaHorariaId }, new { @class = "alert alert-link" })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
 </div>
-<table id="relatorio" class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoDeRegisto.Tipo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Hora)
-        </th>
-        <th>
-        </th>
-    </tr>
-    @{var i = 0;}
-    @foreach (var item in Model)
-    {
-        if (item.TipoId == 2)
-        {
-            <tr><td colspan="3"></td></tr>
-            <tr class="text-primary">
-                <td>Dia:@item.DataHora.Day</td>
-                <td colspan="2">
-                    @String.Format("{0:h:mm}", ViewBag.Tempos[i]) Horas
-                    @{i++;}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataHora)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CargaHorariaId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.CargaHorariaId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CargaHorariaId })
-                </td>
-            </tr>
-        }
-        else
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TipoDeRegisto.Tipo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataHora)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CargaHorariaId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.CargaHorariaId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CargaHorariaId })
-                </td>
-            </tr>
-        }
-    }
-</table>

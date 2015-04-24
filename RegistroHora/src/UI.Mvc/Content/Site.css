@@ -1,8 +1,46 @@
 ﻿body {
     padding-top: 70px;
     padding-bottom: 20px;
+    background-color: #dfe3ee;
+}
+.font-color-1 
+{
+    color: #3b5998;
+}
+.font-color-2 
+{
+   color: #8b9dc3;
+}
+.font-color-3
+{
+    color: #dfe3ee;
+}
+.font-color-4
+{
+    color: #FFFFFF;
+}
+.bg-color-1 
+{
+    background-color: #3b5998;
+}
+.bg-color-2
+{
+    background-color: #8b9dc3;
+}
+.bg-color-3
+{
+    background-color: #dfe3ee;
 }
 
+.bg-color-4
+{
+    background-color: #f7f7f7;
+}
+
+.bg-color-5
+{
+    background-color: #ffffff;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;

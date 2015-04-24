@@ -9,8 +9,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -19,12 +19,12 @@
                 </button>
                 @Html.ActionLink("CargaHoraria", "Index", "CargaHoraria", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse">
                 @if (Session["Login"] != null)
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Index", "Index", "CargaHoraria")</li>
-                        <li>@Html.ActionLink("Create", "Create", "CargaHoraria")</li>
+                        <li>@Html.ActionLink("Inicio", "Index", "CargaHoraria")</li>
+                        <li>@Html.ActionLink("Cadastrar novo Horario", "Create", "CargaHoraria")</li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>@Html.ActionLink("Bem Vindo, " + (string)ViewBag.User.Nome, "Edit/" + (int)ViewBag.User.UsuarioId, "Usuario")</li>
@@ -34,14 +34,14 @@
                 else
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Index", "Index", "Usuario")</li>
-                        <li>@Html.ActionLink("Create", "Create", "Usuario")</li>
+                        <li>@Html.ActionLink("Login", "Index", "Usuario")</li>
+                        <li>@Html.ActionLink("Cadastro", "Create", "Usuario")</li>
                     </ul>
                 }
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
         <hr />
         <footer>
