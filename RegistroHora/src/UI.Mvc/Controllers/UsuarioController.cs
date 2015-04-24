@@ -42,14 +42,6 @@ namespace UI.Mvc.Controllers
             LoginSession = null;
             return RedirectToAction("index");
         }
-        public override ActionResult Create()
-        {
-            if (LoginSession != null)
-            {
-                return RedirectToAction("Index", "CargaHoraria");
-            }
-            return View();
-        }
         [HttpPost]
         public override ActionResult Create(Usuario obj)
         {

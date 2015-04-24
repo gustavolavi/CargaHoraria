@@ -31,17 +31,10 @@
                         <li>@Html.ActionLink("Sair", "Deslogar", "Usuario")</li>
                     </ul>
                 }
-                else
-                {
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Login", "Index", "Usuario")</li>
-                        <li>@Html.ActionLink("Cadastro", "Create", "Usuario")</li>
-                    </ul>
-                }
             </div>
         </div>
     </div>
-    <div class="body-content">
+    <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>

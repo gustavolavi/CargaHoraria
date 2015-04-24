@@ -173,11 +173,10 @@
     <Content Include="Views\CargaHoraria\Edit.cshtml" />
     <Content Include="Views\CargaHoraria\Index.cshtml" />
     <Content Include="Views\CargaHoraria\Create.cshtml" />
-    <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Details.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
-    <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\CargaHoraria\Download.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
