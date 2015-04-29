@@ -60,17 +60,18 @@ namespace UI.Mvc.Controllers
                             return RedirectToAction("Index");
                         }
                         ModelState.AddModelError("", "Email já cadastrado");
-                        return View(obj);
+
+                        return RedirectToAction("Index", obj);
                     }
                     ModelState.AddModelError("", "Login já cadastrado");
                 }
 
-                return View(obj);
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("", e);
-                return View(obj);
+                return RedirectToAction("Index",obj);
             }
         }
         public override ActionResult Delete(int id)

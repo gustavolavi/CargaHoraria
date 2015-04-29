@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - CargaHoraria</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render(" ~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
@@ -27,7 +27,7 @@
                         <li>@Html.ActionLink("Cadastrar novo Horario", "Create", "CargaHoraria")</li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li>@Html.ActionLink("Bem Vindo, " + (string)ViewBag.User.Nome, "Edit/" + (int)ViewBag.User.UsuarioId, "Usuario")</li>
+                        <li>@Html.ActionLink("Bem Vindo, " + (string)ViewBag.User.Nome, "Details/" + (int)ViewBag.User.UsuarioId, "Usuario")</li>
                         <li>@Html.ActionLink("Sair", "Deslogar", "Usuario")</li>
                     </ul>
                 }
